@@ -12,7 +12,7 @@ def call() {
             "-Dsonar.sources=${config.SONAR_SOURCES ?: '.'}",
             "-Dsonar.sourceEncoding=UTF-8",
             "-Dsonar.branch.name=${env.BRANCH_NAME}",
-            "-Dsonar.token=${config.SONAR_token}"
+            "-Dsonar.token=${config.SONAR_TOKEN}"
         ]
         
         //// 添加额外参数
