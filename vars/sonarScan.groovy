@@ -3,10 +3,10 @@ def call() {
         def sonarScannerHome = tool '221-scanner'
         //def sonarScannerHome = '/srv/sonar-scanner'
         def sonarCmd = "${sonarScannerHome}/bin/sonar-scanner"
+        def branchConfig = null
         try {
             def branchConfigFile = "resources/branch-${env.BRANCH_NAME.replaceAll('/', '_')}.properties"
             def generalConfigFile = "resources/sonar-project.properties"
-            def branchConfig = null
             if (fileExists(branchConfigFile)) {
                 branchConfig = readProperties file: "${branchConfigFile}"
             } else if (fileExists(generalConfigFile)) {
