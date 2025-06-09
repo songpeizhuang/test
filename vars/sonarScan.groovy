@@ -1,5 +1,5 @@
 def call() {
-    withSonarQubeEnv('221-scanner') {
+    withSonarQubeEnv('210-sonarqube') {
         def config = readProperties file: resource('sonar.properties')
         def sonarScannerHome = tool '221-scanner'
         //def sonarScannerHome = '/srv/sonar-scanner'
