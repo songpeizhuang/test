@@ -6,9 +6,9 @@ def call() {
         try {
             def branchConfigFile = "resources/branch-${env.BRANCH_NAME.replaceAll('/', '_')}.properties"
             def generalConfigFile = "resources/sonar-project.properties"
-            if (resourceExists(branchConfigFile)) {
+            if (fileExists(branchConfigFile)) {
                 branchConfig = readProperties file: resource(branchConfigFile)
-            } else if (resourceExists(generalConfigFile)) {
+            } else if (fileExists(generalConfigFile)) {
                 branchConfig = readProperties file: resource(generalConfigFile)
 			}
 			sh "${sonarCmd} -Dproject.settings=${branchConfig}"
@@ -16,9 +16,4 @@ def call() {
             echo "⚠️ 分支配置加载失败: ${e.message}"
         }
     }
-}
-
-// 检查资源是否存在
-def resourceExists(String path) {
-    return getClass().getResourceAsStream("/${path}") != null
 }
