@@ -7,9 +7,9 @@ def call() {
             def branchConfigFile = "resources/branch-${env.BRANCH_NAME.replaceAll('/', '_')}.properties"
             def generalConfigFile = "resources/sonar-project.properties"
             if (fileExists(branchConfigFile)) {
-                branchConfig = readProperties file: resource(branchConfigFile)
+                branchConfig = readProperties file: "${branchConfigFile}"
             } else if (fileExists(generalConfigFile)) {
-                branchConfig = readProperties file: resource(generalConfigFile)
+                branchConfig = readProperties file: "${generalConfigFile}"
 			}
 			sh "${sonarCmd} -Dproject.settings=${branchConfig}"
         } catch (e) {
