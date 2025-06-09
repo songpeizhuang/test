@@ -10,10 +10,15 @@ def call() {
                 branchConfig = readProperties file: "${branchConfigFile}"
             } else if (fileExists(generalConfigFile)) {
                 branchConfig = readProperties file: "${generalConfigFile}"
-			}
-			sh "${sonarCmd} -Dproject.settings=${branchConfig}"
+            }
         } catch (e) {
             echo "⚠️ 分支配置加载失败: ${e.message}"
+        }
+        if (branchConfig != null && !branchConfig.toString().trim().isEmpty()) {
+            // 变量存在且非空（包括非空字符串）
+            sh "${sonarCmd} -Dproject.settings=${branchConfig}"
+        } else {
+            echo "变量branchConfig不存在或为空值"
         }
     }
 }
