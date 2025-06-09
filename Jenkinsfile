@@ -3,12 +3,10 @@
 pipeline {
     agent { label 'docker平台' }
     stages {
-        stage('SCM') {
-            checkout scm
-        }
         stage ('SonarQube Analysis') {
             steps {
                  script { 
+                    checkout scm
                     sonarScan()
                  }
             }
