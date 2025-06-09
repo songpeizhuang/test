@@ -8,7 +8,7 @@ def call() {
             def generalConfigFile = "resources/sonar-project.properties"
             if (resourceExists(branchConfigFile)) {
                 branchConfig = readProperties file: resource(branchConfigFile)
-            } elif (resourceExists(generalConfigFile)) {
+            } else if (resourceExists(generalConfigFile)) {
                 branchConfig = readProperties file: resource(generalConfigFile)
 			}
 			sh "${sonarCmd} -Dproject.settings=${branchConfig}"
