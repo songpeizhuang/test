@@ -7,7 +7,7 @@ pipeline {
             steps {
                  script { 
                     checkout scm
-                    sonarScan(loadConfig)
+                    sonarScan()
                  }
             }
         }
