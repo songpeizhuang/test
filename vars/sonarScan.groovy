@@ -1,5 +1,5 @@
 def call() {
-    withSonarQubeEnv() {
+    withSonarQubeEnv('210-sonarqube') {
         def config = readProperties file: 'resources/sonar.properties'
         def sonarScannerHome = tool '221-scanner'
         //def sonarScannerHome = '/srv/sonar-scanner'
@@ -12,7 +12,7 @@ def call() {
             "-Dsonar.sources=${config.SONAR_SOURCES ?: '.'}",
             "-Dsonar.sourceEncoding=UTF-8",
             "-Dsonar.branch.name=${env.BRANCH_NAME}",
-            "-Dsonar.exclusions=${config.SONAR_EXCLUSIONS}"
+            "-Dsonar.token=${config.SONAR_token}"
         ]
         
         //// 添加额外参数
