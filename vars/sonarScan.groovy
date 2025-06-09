@@ -6,6 +6,7 @@ def call() {
         try {
             def branchConfigFile = "resources/branch-${env.BRANCH_NAME.replaceAll('/', '_')}.properties"
             def generalConfigFile = "resources/sonar-project.properties"
+            def branchConfig = ""
             if (fileExists(branchConfigFile)) {
                 branchConfig = readProperties file: "${branchConfigFile}"
             } else if (fileExists(generalConfigFile)) {
@@ -14,11 +15,11 @@ def call() {
         } catch (e) {
             echo "⚠️ 分支配置加载失败: ${e.message}"
         }
-        if (branchConfig != null && !branchConfig.toString().trim().isEmpty()) {
-            // 变量存在且非空（包括非空字符串）
+        if (!branchConfig.toString().trim().isEmpty()) {
+            // 变量非空（包括非空字符串）
             sh "${sonarCmd} -Dproject.settings=${branchConfig}"
         } else {
-            echo "变量branchConfig不存在或为空值"
+            echo "变量branchConfig为空值"
         }
     }
 }
