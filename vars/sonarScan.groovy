@@ -1,26 +1,24 @@
 def call() {
     withSonarQubeEnv('210-sonarqube') {
-        def config = readProperties file: 'resources/sonar.properties'
         def sonarScannerHome = tool '221-scanner'
         //def sonarScannerHome = '/srv/sonar-scanner'
         def sonarCmd = "${sonarScannerHome}/bin/sonar-scanner"
-        
-        def cmdArgs = [
-            "-Dsonar.projectKey=${config.SONAR_PROJECT_KEY}",
-            "-Dsonar.projectName=${config.SONAR_PROJECT_NAME}",
-            "-Dsonar.projectVersion=${env.BUILD_NUMBER}",
-            "-Dsonar.sources=${config.SONAR_SOURCES ?: '.'}",
-            "-Dsonar.sourceEncoding=UTF-8",
-            "-Dsonar.branch.name=${env.BRANCH_NAME}",
-            "-Dsonar.token=${config.SONAR_TOKEN}"
-        ]
-        
-        //// 添加额外参数
-        //if (config.SONAR_EXTRA_ARGS) {
-        //    cmdArgs += config.SONAR_EXTRA_ARGS.split(' ')
-        //}
-        
-        // 执行扫描
-        sh "${sonarCmd} ${cmdArgs.join(' ')}"
+        try {
+            def branchConfigFile = "resources/branch-${env.BRANCH_NAME.replaceAll('/', '_')}.properties"
+            def generalConfigFile = "resources/sonar-project.properties"
+            if (resourceExists(branchConfigFile)) {
+                branchConfig = readProperties file: resource(branchConfigFile)
+            } elif (resourceExists(generalConfigFile)) {
+                branchConfig = readProperties file: resource(generalConfigFile)
+			}
+			sh "${sonarCmd} -Dproject.settings=${branchConfig}"
+        } catch (e) {
+            echo "⚠️ 分支配置加载失败: ${e.message}"
+        }
     }
+}
+
+// 检查资源是否存在
+def resourceExists(String path) {
+    return getClass().getResourceAsStream("/${path}") != null
 }
