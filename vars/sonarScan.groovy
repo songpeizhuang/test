@@ -13,7 +13,7 @@ def call() {
                 branchConfig = "${generalConfigFile}"
             }
         } catch (e) {
-            echo "⚠️ 分支配置加载失败: ${e.message}"
+            echo "⚠️ 配置加载失败: ${e.message}"
         }
         if (branchConfig != null && !branchConfig.toString().trim().isEmpty()) {
             // 变量非空（包括非空字符串）
