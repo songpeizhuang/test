@@ -16,8 +16,15 @@ def call() {
             echo "⚠️ 配置加载失败: ${e.message}"
         }
         if (branchConfig != null && !branchConfig.toString().trim().isEmpty()) {
+            def Args = readFile(file: "${FILECONTENT}.log").split('\n')
+            def COMMAND_ARGS = ''
+            Args.each{ arg ->
+                if (arg != '') {
+                    COMMAND_ARGS = COMMAND_ARGS + "-D${arg} "
+                }
+            }
             // 变量非空（包括非空字符串）
-            sh "${sonarCmd} -Dproject.settings=${branchConfig}"
+            sh "${sonarCmd} ${COMMAND_ARGS}"
         } else {
             echo "变量branchConfig为空值"
         }
