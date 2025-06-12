@@ -16,7 +16,7 @@ def call() {
             echo "⚠️ 配置加载失败: ${e.message}"
         }
         if (branchConfig != null && !branchConfig.toString().trim().isEmpty()) {
-            def Args = readFile(file: "${FILECONTENT}.log").split('\n')
+            def Args = readFile(file: "${branchConfig}").split('\n')
             def COMMAND_ARGS = ''
             Args.each{ arg ->
                 if (arg != '') {
