@@ -1,2 +1,2 @@
-@Library('shared-library') _
+@Library('global-T-shared-library') _
 loadPipeline()
